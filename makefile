@@ -1,6 +1,6 @@
 TARGET = main
 CC = gcc
-CFLAGS = -Wall -Wextra -g -std=c11 -mavx -mavx2
+CFLAGS = -Wall -Wextra -g -std=c11 -mavx -mavx2 -mavx512f
 SRC_DIR = src
 
 SRC = $(SRC_DIR)/main.c
