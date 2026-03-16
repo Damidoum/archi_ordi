@@ -13,8 +13,7 @@ double dist(float *u, float *v, int n) {
 }
 
 // exercice 2
-double dist_avx(float *u, float *v, int n) {
-  double sum = 0.;
+float dist_avx(float *u, float *v, int n) {
   __m128d vec_sum = _mm_setr_ps(0.0, 0.0, 0.0, 0.0);
   __m128 one = _mm_setr_ps(1.0, 1.0, 1.0, 1.0);
 
@@ -28,7 +27,7 @@ double dist_avx(float *u, float *v, int n) {
   }
   vec_sum = _mm_hadd_ps(vec_sum, vec_sum);
   vec_sum = _mm_hadd_ps(vec_sum, vec_sum);
-  return *((float *)vec_sum);
+  return ((float *)&vec_sum)[0];
 }
 
 int main() {
