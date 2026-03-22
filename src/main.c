@@ -107,6 +107,24 @@ double vect_dist_gen(float *u, float *v, int n) {
   return sum;
 }
 
+// exercice 4
+double flex_dist_gen(float *u, float *v, int n, int a, int b, int mode) {
+  if (mode == 1) {
+    if (b < n)
+      return vect_dist_gen(&u[a], &v[a], b - a);
+    else
+      return vect_dist_gen(&u[a], &v[a], n - a);
+  } else {
+    if (b < n)
+      return dist(&u[a], &v[a], b - a);
+    else
+      return dist(&u[a], &v[a], n - a);
+  }
+}
+
+// exercice 5
+void distPar(float *u, float *v, int n, int nb_threads, int mode) {}
+
 int main() {
 #define N 10
   float u[N] __attribute__((aligned(64))) = {4, 5, 6, 10, 11, 2, 2, 3, 8, 0};
