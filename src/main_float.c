@@ -168,7 +168,10 @@ int main() {
   float *u = (float *)aligned_alloc(32, N * sizeof(float));
   float *v = (float *)aligned_alloc(32, N * sizeof(float));
 
-  for (int i = 0; i < N; i++) {
+  int nb_threads = 8;
+
+  for (int i = 0; i < N; i++)
+  {
     // random float between 0 and 1
     u[i] = (float)rand() / (float)(RAND_MAX);
     v[i] = (float)rand() / (float)(RAND_MAX);
@@ -181,9 +184,9 @@ int main() {
   gettimeofday(&t2, 0);
   double dist_vectoriel = dist_avx_gen(u, v, N);
   gettimeofday(&t3, 0);
-  double dist_multithread = distPar(u, v, N, 8, 0);
+  double dist_multithread = distPar(u, v, N, nb_threads, 0);
   gettimeofday(&t4, 0);
-  double dist_multithread_vectoriel = distPar(u, v, N, 8, 1);
+  double dist_multithread_vectoriel = distPar(u, v, N, nb_threads, 1);
   gettimeofday(&t5, 0);
 
   double duration_scalar = (double)(t2.tv_sec - t1.tv_sec) +
@@ -200,14 +203,14 @@ int main() {
   double speedup_mt = duration_scalar / duration_multithread;
   double speedup_mt_avx = duration_scalar / duration_multithread_vectoriel;
 
-  printf("Dist: %f, Time: %f seconds\n", dist_scalar, duration_scalar);
-  printf("Dist avx: %f, Time: %f seconds, Speedup: %.2fx\n", dist_vectoriel,
+  printf("%26s %f, Time: %f seconds\n", "Dist:", dist_scalar, duration_scalar);
+  printf("%26s %f, Time: %f seconds, Speedup: %.2fx\n", "Dist avx:", dist_vectoriel,
          duration_vectoriel, speedup_avx);
-  printf("Multi thread Flex Dist gen: %f, Time: %f seconds, Speedup: %.2fx\n",
-         dist_multithread, duration_multithread, speedup_mt);
+  printf("%21s (%d): %f, Time: %f seconds, Speedup: %.2fx\n",
+         "Dist multi-thread", nb_threads, dist_multithread, duration_multithread, speedup_mt);
   printf(
-      "Multi thread Flex Dist avx gen: %f, Time: %f seconds, Speedup: %.2fx\n",
-      dist_multithread_vectoriel, duration_multithread_vectoriel,
+      "%21s (%d): %f, Time: %f seconds, Speedup: %.2fx\n",
+      "Dist avx multi-thread", nb_threads, dist_multithread_vectoriel, duration_multithread_vectoriel,
       speedup_mt_avx);
 
   // free memory
